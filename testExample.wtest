@@ -1,9 +1,116 @@
-import example.pepita
+import golosinas.*
+/*## Tests de golosinas
+Para cada golosina definida en la parte 1, salvo la golosina bañada
+(bombón, alfajor, caramelo, chupetín, oblea, chocolatín, pastilla tutti-frutti)
+definir un test en el que 
+- se verifique que el peso inicial, el precio y el gusto sean los indicados
+ en el enunciado; y que es, o no, libre de gluten, de acuerdo también
+ a lo que se indica en el enunciado. 
+Para el chocolatín hacer dos comprobaciones, una con 40 gramos de peso inicial
+y la otra con 100.
+Para la pastilla tutti-frutti, hacer dos comprobaciones, una en la que es
+libre de gluten y la otra en que no.
+- se le den dos mordiscos a la golosina, y se validen los cambios esperados
+ en peso o sabor después de cada uno. Para chocolatín y pastilla tutti-frutti
+ usar las dos variantes descriptas en el ítem anterior. Para la oblea, que
+ sean tres mordiscos en lugar de dos.
 
-describe "group of tests for pepita" {
+Para la golosina bañada, hacer las mismas comprobaciones, para tres casos
+ distintos: 
+- bañando una pastilla tutti-frutti.
+- bañando un chocolatín.
+- bañando un chupetín.
+ */ 
 
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "test para golosinas" {
+
+  test "test bombon" {
+    const bombon = new Bombon()
+    assert.equals(bombon.precio(), 5)
+    assert.equals(bombon.sabor(), frutilla)
+    assert.equals(bombon.peso(), 15)
+    assert.equals(bombon.esLibreDeGluten(), true)
+
+    bombon.mordizco()
+    assert.equals(bombon.peso(), 11)
+
+    bombon.mordizco()
+    assert.equals(bombon.peso(), 7.8)
+  }
+  test "test alfajor" {
+    const alfajor = new Alfajor()
+    assert.equals(alfajor.precio(), 12)
+    assert.equals(alfajor.sabor(), chocolate)
+    assert.equals(alfajor.peso(), 300)
+    assert.equals(alfajor.esLibreDeGluten(), false)
+
+    alfajor.mordizco()
+    assert.equals(alfajor.peso(), 240)
+
+    alfajor.mordizco()
+    assert.equals(alfajor.peso(), 192)
+  } 
+  test "chocolatin con 40 gramos" {
+    const chocolatin = new Chocolatin(pesoInicial= 40)
+    assert.equals(chocolatin.peso(), 40)
+    assert.equals(chocolatin.precio(), 20)
+    assert.equals(chocolatin.sabor(), chocolate)
+    assert.equals(chocolatin.esLibreDeGluten(), false)
+
+    chocolatin.mordizco()
+    assert.equals(chocolatin.peso(), 38)
+
+    chocolatin.mordizco()
+    assert.equals(chocolatin.peso(), 36)
+    assert.equals(chocolatin.precio(), 20)
+  }
+  test "chocolatin con 100 gramos" {
+    const chocolatin = new Chocolatin(pesoInicial= 100)
+    assert.equals(chocolatin.peso(), 100)
+
+    assert.equals(chocolatin.precio(), 50)
+    assert.equals(chocolatin.sabor(), chocolate)
+    assert.equals(chocolatin.esLibreDeGluten(), false)
+
+    chocolatin.mordizco()
+    assert.equals(chocolatin.peso(), 98)
+
+    chocolatin.mordizco()
+    assert.equals(chocolatin.peso(), 96)
+    assert.equals(chocolatin.precio(), 50)
+  }
+  test "pastilla tutti-frutti libre de gluten" {
+    const pastilla = new PastillaTuttiFrutti(libreDeGluten= true)
+    assert.equals(pastilla.peso(), 5)
+    assert.equals(pastilla.precio(), 7)
+    assert.equals(frutilla, pastilla.sabor()) // sabor inicial
+    assert.equals(pastilla.esLibreDeGluten(), true)
+
+    pastilla.mordizco()
+    assert.equals(pastilla.peso(), 4)
+    assert.equals(chocolate, pastilla.sabor()) // sabor después del primer mordisco
+
+    pastilla.mordizco()
+    assert.equals(pastilla.peso(), 3)
+    assert.equals(naranja, pastilla.sabor()) // sabor después del segundo mordisco
+  }
+  test "pastilla tutti-frutti no es sin TACC" {
+    const pastilla2 = new PastillaTuttiFrutti(libreDeGluten= false)
+    assert.equals(pastilla2.peso(), 5)
+    assert.equals(pastilla2.precio(), 10)
+    assert.equals(frutilla, pastilla2.sabor()) // sabor inicial
+    assert.equals(pastilla2.esLibreDeGluten(), false)
+
+    pastilla2.mordizco()
+    assert.equals(pastilla2.peso(), 4)
+    assert.equals(chocolate, pastilla2.sabor()) // sabor después del primer mordisco
+
+    pastilla2.mordizco()
+    assert.equals(pastilla2.peso(), 3)
+    assert.equals(naranja, pastilla2.sabor()) // sabor después del segundo mordisco
+    pastilla2.mordizco()
+    assert.equals(pastilla2.peso(), 2)
+    assert.equals(frutilla, pastilla2.sabor()) // sabor después del tercer mordisco
   }
 
 }

@@ -101,6 +101,30 @@ class GolosinaBanada {
     
   }
 }
+/* #### Pastilla tutti-frutti
+Pesa inicialmente 5 gramos. 
+La pastilla puede ser libre de gluten o no (se configura). Si es libre de gluten el precio es $7; si no, es de $10.  
+En cada mordisco cambia el sabor, pasa de frutilla a chocolate, de ahí a naranja, de ahí vuelve a frutilla. */
+class PastillaTuttiFrutti {
+  var peso = 5
+  var libreDeGluten = true
+  var indiceSaborActual = 0
+  const sabores = [frutilla, chocolate, naranja]
+
+  method configurarLibreDeGluten(valor) {
+    libreDeGluten = valor
+  }
+
+  method precio() = if (libreDeGluten) 7 else 10
+  method sabor() = sabores.get(indiceSaborActual)
+  method peso() = peso
+  method esLibreDeGluten() = libreDeGluten
+
+  method mordizco() {
+    indiceSaborActual = (indiceSaborActual + 1) % sabores.size()
+    peso = (peso - 1).max(0)
+  }
+}
 object frutilla{
     
   }
