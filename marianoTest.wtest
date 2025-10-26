@@ -1,0 +1,141 @@
+
+   import mariano.*
+   import golosinas.*
+
+   describe "Testeando a mariano" {
+
+     test "inicializar mariano" {
+       assert.equals(mariano.cantidadDeGolosinas(), 0)
+     }
+
+     test "comprar golosinas" {
+       const bombon = new Bombon()
+       mariano.comprar(bombon)
+       assert.equals(mariano.cantidadDeGolosinas(), 1)
+
+       const alfajor = new Alfajor()
+       mariano.comprar(alfajor)
+       assert.equals(mariano.cantidadDeGolosinas(), 2)
+     }
+
+     test "desechar golosinas" {
+       const bombon = new Bombon()
+       mariano.comprar(bombon)
+       const alfajor = new Alfajor()
+       mariano.comprar(alfajor)
+
+       mariano.desechar(bombon)
+       assert.equals(mariano.cantidadDeGolosinas(), 1)
+       assert.equals(mariano.tieneLaGolosina(bombon), false)
+     }
+     test "si tiene la golosina que se quiere comprar" {
+       const bombon = new Bombon()
+       const alfajor = new Alfajor()
+       mariano.comprar(bombon)
+       assert.equals(mariano.tieneLaGolosina(bombon), true)
+       assert.equals(mariano.tieneLaGolosina(alfajor), false)
+     }
+     test "probar golosinas" {
+       const bombon = new Bombon()
+       const alfajor = new Alfajor()
+       mariano.comprar(bombon)
+       mariano.comprar(alfajor)
+
+       mariano.probarGolosinas()
+       assert.equals(bombon.peso(), 11)
+       assert.equals(alfajor.peso(), 240)
+     }
+     test "hay golosinas sin TACC" {
+       const bombon = new Bombon()
+       const alfajor = new Alfajor()
+       mariano.comprar(bombon)
+       assert.equals(mariano.hayGolosinaSinTACC(), true)
+
+       mariano.comprar(alfajor)
+       assert.equals(mariano.hayGolosinaSinTACC(), true)
+     }
+     test "precios cuidados" {
+       const bombon = new Bombon()
+       const alfajor = new Alfajor()
+       mariano.comprar(bombon)
+       assert.equals(mariano.preciosCuidados(), true)
+
+       mariano.comprar(alfajor)
+       assert.equals(mariano.preciosCuidados(), false)
+     }
+     test "golosina de sabor" {
+       const bombon = new Bombon()
+       const alfajor = new Alfajor()
+       const pastilla = new PastillaTuttiFrutti()
+       const golosinaBanada = new GolosinaBanada(golosinaBase= alfajor)
+       pastilla.configurarLibreDeGluten(false)
+       mariano.comprar(bombon)
+       mariano.comprar(golosinaBanada)
+       mariano.comprar(alfajor)
+       mariano.comprar(pastilla)
+
+       assert.equals(mariano.golosinaDeSabor(frutilla), bombon)
+       assert.equals(mariano.golosinaDeSabor(chocolate), golosinaBanada)
+       mariano.desechar(bombon)
+       assert.equals(mariano.golosinaDeSabor(frutilla), pastilla)
+       pastilla.mordizco() // ahora sabor chocolate
+       pastilla.mordizco() // ahora sabor naranja
+       assert.equals(mariano.golosinaDeSabor(naranja), pastilla)
+       assert.equals(mariano.hayGolosinaSinTACC(), false)
+     }
+     test "golosinas de sabor" {
+       const bombon1 = new Bombon()
+       const bombon2 = new Bombon()
+       const alfajor = new Alfajor()
+       const golosinaB = new GolosinaBanada(golosinaBase= bombon1)
+       mariano.comprar(bombon1)
+       mariano.comprar(alfajor)
+       mariano.comprar(bombon2)
+       mariano.comprar(golosinaB)
+       assert.equals(mariano.golosinasDeSabor(frutilla), [bombon1, bombon2, golosinaB])
+       assert.equals(mariano.golosinasDeSabor(chocolate), [alfajor])
+
+     }
+   }
+   test "Sabores únicos en la bolsa de Mariano" {
+    const bombon1 = new Bombon()
+    const goloBanada = new GolosinaBanada(golosinaBase= bombon1)
+    const pastilla = new PastillaTuttiFrutti()
+    mariano.comprar(bombon1) // frutilla
+    mariano.comprar(goloBanada) // frutilla por el bombom
+    mariano.comprar(pastilla) //frutilla es el sabor inicial
+    assert.that(mariano.sabores().contains(frutilla))
+    assert.notThat(mariano.sabores().contains(naranja))
+    assert.equals(1, mariano.sabores().size())
+    pastilla.mordizco() // ahora sabor chocolate
+    assert.equals(2, mariano.sabores().size())
+    assert.equals([frutilla, chocolate].asSet(), mariano.sabores())
+
+}
+test "golosina mas cara y peso total de golosinas" {
+  const bombon = new Bombon()
+  const alfajor = new Alfajor()
+  const pastilla = new PastillaTuttiFrutti()
+  const golosinaBanada = new GolosinaBanada(golosinaBase= alfajor)
+  pastilla.configurarLibreDeGluten(false)
+  mariano.comprar(bombon)
+  mariano.comprar(golosinaBanada)
+  mariano.comprar(alfajor)
+  mariano.comprar(pastilla)
+
+  assert.equals(mariano.golosinaMasCara(), golosinaBanada)
+  assert.equals(mariano.pesoDeGolosinas(), 624)
+}
+test "golosinas y gustos faltantes" {
+  const bombon = new Bombon()
+  const alfajor = new Alfajor()
+  const pastilla = new PastillaTuttiFrutti()
+  mariano.comprar(bombon)
+  mariano.comprar(alfajor)
+
+  const golosinasDeseadas = [bombon, pastilla]
+  assert.equals(mariano.golosinasFaltantes(golosinasDeseadas), [pastilla])
+
+  const gustosDeseados = [frutilla, chocolate, naranja]
+  assert.equals(mariano.gustosFaltantes(gustosDeseados), [naranja])
+} 

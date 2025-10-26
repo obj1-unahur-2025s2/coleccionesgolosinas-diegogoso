@@ -1,53 +1,60 @@
-class Bombon{
+class Golosina{
+  method precio() {}
+  method sabor() {}
+  method peso() {}
+  method esLibreDeGluten() = true
+  method mordizco() {}
+}
+class Bombon inherits Golosina{
   
   var peso = 15
-  method precio() { return 5}
-  method sabor() = frutilla
-  method peso() {return peso}
-  method esLibreDeGluten() {return true}
-  method mordizco(){
+  override method precio() { return 5}
+  override method sabor() = frutilla
+  override method peso() {return peso}
+  override method esLibreDeGluten() {return true}
+  override method mordizco(){
      peso = ((peso * 0.8) -1).max(0)
   }
 }
-class Alfajor{
+class Alfajor inherits Golosina{
   var peso = 300
-  method precio() { return 12}
-  method sabor() = chocolate
-  method peso() {return peso}
-  method esLibreDeGluten() {return false}
-  method mordizco(){
+  override method precio() { return 12}
+  override method sabor() = chocolate
+  override method peso() {return peso}
+  override method esLibreDeGluten() {return false}
+  override method mordizco(){
      peso = ((peso * 0.8)).max(0)
   }
 }
-class Caramelo{
+class Caramelo inherits Golosina{
   var peso = 5
-  method precio() { return 1}
-  method sabor() = frutilla
-  method peso() {return peso}
-  method esLibreDeGluten() {return true}
-  method mordizco(){
+  override method precio() { return 1}
+  override method sabor() = frutilla
+  override method peso() {return peso}
+  override method esLibreDeGluten() {return true}
+  override method mordizco(){
      peso = (peso -1).max(0)
   }
 }
-class Chupetin{
+class Chupetin inherits Golosina{
   var peso = 7
-  method precio () {return 2}
-  method sabor() = naranja
-  method esLibreDeGluten() {return true}
-  method mordizco() {
+  override method precio () {return 2}
+  override method sabor() = naranja
+  override method esLibreDeGluten() {return true}
+  override method mordizco() {
      if (peso >= 2) {
        peso = (peso - peso * 0.1).max(0)
      }
   }
-  method peso() {return peso}
+  override method peso() {return peso}
 }
-class Oblea{
+class Oblea inherits Golosina{
   var peso = 250
-  method precio() { return 5}
-  method sabor() = vainilla
-  method peso() {return peso}
-  method esLibreDeGluten() {return false}
-  method mordizco() { peso = (peso - if( peso > 70) peso * 0.5 else peso *0.25).max(0)
+  override method precio() { return 5}
+  override method sabor() = vainilla
+  override method peso() {return peso}
+  override method esLibreDeGluten() {return false}
+  override method mordizco() { peso = (peso - if( peso > 70) peso * 0.5 else peso *0.25).max(0)
   }
 
 }
@@ -55,15 +62,15 @@ class Oblea{
 El peso inicial es desconocido, lo asigna el usuario. El precio es de $0,50 por cada gramo de peso inicial. No es libre de gluten. Obviamente, su gusto es chocolate.   
 Pierde 2 gramos por mordisco.   
 **¡Atención!** El precio es según el _peso inicial_, no debe cambiar con los mordiscos. */
-class Chocolatin {
+class Chocolatin inherits Golosina{
   var pesoInicial
   var peso = pesoInicial
-   
-  method precio() = pesoInicial * 0.5
-  method sabor() = chocolate
-  method peso() = peso
-  method esLibreDeGluten() = false
-  method mordizco() {
+
+  override method precio() = pesoInicial * 0.5
+  override method sabor() = chocolate
+  override method peso() = peso
+  override method esLibreDeGluten() = false
+  override method mordizco() {
     peso = (peso - 2).max(0)
   }
 }
@@ -74,7 +81,7 @@ De la misma manera, es libre de gluten si lo es su golosina base.
 Con cada mordisco se da un mordisco a la golosina de base. Además, en el primer mordisco pierde 2 gramos de
 bañado, y en el segundo los otros dos.*/
 
-class GolosinaBanada {
+class GolosinaBanada inherits Golosina{
   var property golosinaBase  = new Bombon()
   const pesobanio = 4
   var peso = golosinaBase.peso() + pesobanio
@@ -85,12 +92,12 @@ class GolosinaBanada {
     peso = golosinaBase.peso() + pesobanio
   }*/
 
-  method precio() = golosinaBase.precio() + 2
-  method sabor() = golosinaBase.sabor()
-  method peso() = peso
-  method esLibreDeGluten() = golosinaBase.esLibreDeGluten()
+ override method precio() = golosinaBase.precio() + 2
+  override method sabor() = golosinaBase.sabor()
+  override method peso() = peso
+  override method esLibreDeGluten() = golosinaBase.esLibreDeGluten()
 
-  method mordizco() {
+  override method mordizco() {
     golosinaBase.mordizco()
     if (mordiscosTomados < 2) {
       peso = (peso -2)
@@ -105,7 +112,7 @@ class GolosinaBanada {
 Pesa inicialmente 5 gramos. 
 La pastilla puede ser libre de gluten o no (se configura). Si es libre de gluten el precio es $7; si no, es de $10.  
 En cada mordisco cambia el sabor, pasa de frutilla a chocolate, de ahí a naranja, de ahí vuelve a frutilla. */
-class PastillaTuttiFrutti {
+class PastillaTuttiFrutti inherits Golosina{
   var peso = 5
   var libreDeGluten = true
   var indiceSaborActual = 0
@@ -115,12 +122,12 @@ class PastillaTuttiFrutti {
     libreDeGluten = valor
   }
 
-  method precio() = if (libreDeGluten) 7 else 10
-  method sabor() = sabores.get(indiceSaborActual)
-  method peso() = peso
-  method esLibreDeGluten() = libreDeGluten
+  override method precio() = if (libreDeGluten) 7 else 10
+  override method sabor() = sabores.get(indiceSaborActual)
+  override method peso() = peso
+  override method esLibreDeGluten() = libreDeGluten
 
-  method mordizco() {
+  override method mordizco() {
     indiceSaborActual = (indiceSaborActual + 1) % sabores.size()
     peso = (peso - 1).max(0)
   }
