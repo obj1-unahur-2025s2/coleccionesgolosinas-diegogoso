@@ -3,7 +3,7 @@ class Golosina{
   method sabor() {}
   method peso() {}
   method esLibreDeGluten() = true
-  method mordizco() {}
+  method mordizco() 
 }
 class Bombon inherits Golosina{
   
